@@ -41,7 +41,6 @@ const invalidCredentials: readonly ICredentials[] = [
     }
 ];
 
-
 test.beforeEach(async ({ page }) => {
     const url = "https://anatoly-karpovich.github.io/demo-login-form/";
     const registerLink = page.locator('#registerOnLogin');
