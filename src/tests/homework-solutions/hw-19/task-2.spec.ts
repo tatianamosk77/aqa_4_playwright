@@ -81,7 +81,7 @@ test.describe("[Full registration Form]", () => {
         const emailInput = page.locator("#email");
         const phoneInput = page.locator("#phone");
         const countryDropdown = page.locator("#country");
-        const genderType = page.locator(`//input[@type='radio' and @name='gender' and @value = "${genderValue}"]`
+        const genderType = page.locator(`//input[@value="${genderValue}"]`
         );
         const languageInput = page.locator("#language");
         const skillsTypeDropdown = page.locator("#skills");
