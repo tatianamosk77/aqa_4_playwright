@@ -7,7 +7,7 @@ import _ from "lodash";
 
 test.describe("[Sales Portal] [Products]", () => {
   //test with fixtures version 1
-  test("Product Details", async ({ signInPage, homePage, productsListPage, addNewProductPage }) => {
+  test("Check product Details", async ({ signInPage, homePage, productsListPage, addNewProductPage }) => {
     //login page
     // const emailInput = page.locator("#emailinput");
     // const passwordInput = page.locator("#passwordinput");
