@@ -1,6 +1,6 @@
 
-import { IProduct } from "data/types/product.types";
-import { SalesPortalPage } from "../sales-portal.page";
+import { IProduct } from "data/types/product.types.js";
+import { SalesPortalPage } from "../sales-portal.page.js";
 
 export class AddNewProductPage extends SalesPortalPage {
     readonly title = this.page.locator("h2.page-title-text");

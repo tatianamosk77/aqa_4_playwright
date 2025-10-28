@@ -1,6 +1,6 @@
 
-import { ICredentials } from "data/types/credentials.types";
-import { SalesPortalPage } from "./sales-portal.page";
+import { ICredentials } from "data/types/credentials.types.js";
+import { SalesPortalPage } from "./sales-portal.page.js";
 
 export class SignInPage extends SalesPortalPage {
 
