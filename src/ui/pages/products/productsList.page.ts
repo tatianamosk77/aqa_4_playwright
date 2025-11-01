@@ -2,10 +2,14 @@ import { IProductInTable } from "data/types/product.types.js";
 import { SalesPortalPage } from "../sales-portal.page.js";
 import { MANUFACTURERS } from "data/sales-portal/products/manufacturers.js";
 import { ProductDetailsModal } from "./details.modal.js";
+import { ConfirmationModal } from "./confirmation.modal.js";
+
 
 export class ProductsListPage extends SalesPortalPage {
     readonly detailsModal = new ProductDetailsModal(this.page);
+    readonly confirmationModal = new ConfirmationModal(this.page);
 
+    readonly notification = this.page.locator()
     readonly productsPageTitle = this.page.locator("h2.fw-bold");
     readonly addNewProductButton = this.page.locator('[name="add-button"]');
     readonly tableRow = this.page.locator("tbody tr");
