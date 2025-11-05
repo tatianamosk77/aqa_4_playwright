@@ -7,13 +7,10 @@ import { HomePage } from "ui/pages/home.page.js";
 import { AddNewProductPage } from "ui/pages/products/addNewProduct.page.js";
 import { ProductsListPage } from "ui/pages/products/productsList.page.js";
 
-import { SignInPage } from "ui/pages/sign-in.page.js";
-
 export interface IPages {
   homePage: HomePage;
   productsListPage: ProductsListPage;
   addNewProductPage: AddNewProductPage;
-  signInPage: SignInPage;
 }
 
 export const test = base.extend<IPages>({
@@ -25,9 +22,6 @@ export const test = base.extend<IPages>({
   },
   addNewProductPage: async ({ page }, use) => {
     await use(new AddNewProductPage(page));
-  },
-  signInPage: async ({ page }, use) => {
-    await use(new SignInPage(page));
   },
 });
 
