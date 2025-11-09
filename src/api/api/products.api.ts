@@ -1,7 +1,14 @@
 import { IApiClient } from "api/apiClients/types.js";
 import { apiConfig } from "config/apiConfig.js";
 import { IRequestOptions } from "data/types/core.types.js";
-import { IProduct, IProductResponse, IProductsResponse } from "data/types/product.types.js";
+import {
+  IGetProductsParams,
+  IProduct,
+  IProductResponse,
+  IProductsResponse,
+  IProductsSortedResponse,
+} from "data/types/product.types.js";
+import { convertRequestParams } from "utils/queryParams.utils.js";
 
 export class ProductsApi {
   constructor(private apiClient: IApiClient) { }
@@ -67,6 +74,20 @@ export class ProductsApi {
     };
 
     return await this.apiClient.send<IProductsResponse>(options);
+  }
+
+  async getSorted(token: string, params?: Partial<IGetProductsParams>) {
+    const options: IRequestOptions = {
+      baseURL: apiConfig.baseURL,
+      url: apiConfig.endpoints.products + (params ? convertRequestParams(params) : ""),
+      method: "get",
+      headers: {
+        "content-type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    };
+
+    return await this.apiClient.send<IProductsSortedResponse>(options);
   }
 
   async delete(_id: string, token: string) {
