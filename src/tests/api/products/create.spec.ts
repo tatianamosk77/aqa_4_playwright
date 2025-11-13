@@ -1,0 +1,81 @@
+import { test, expect } from "fixtures/api.fixture.js";
+import { generateProductData } from "data/salesPortal/products/generateProductData.js";
+import { createProductSchema } from "data/schemas/products/create.schema.js";
+import { STATUS_CODES } from "data/statusCodes.js";
+import _ from "lodash";
+import { validateResponse } from "utils/validation/validateResponse.utils.js";
+import { IProduct } from "data/types/product.types.js";
+import { createProductNegativeCases, createProductPositiveCases } from "data/salesPortal/products/generateProductTestData.js";
+
+test.describe("[API] [Sales Portal] [Products]", () => {
+  let id = "";
+  let token = "";
+
+  test.afterEach(async ({ productsApiService }) => {
+    if (id) await productsApiService.delete(token, id);
+  });
+
+  test("Create Product", async ({ loginApiService, productsApi }) => {
+    token = await loginApiService.loginAsAdmin();
+    const productData = generateProductData();
+    const createdProduct = await productsApi.create(productData, token);
+    validateResponse(createdProduct, {
+      status: STATUS_CODES.CREATED,
+      schema: createProductSchema,
+      IsSuccess: true,
+      ErrorMessage: null,
+    });
+
+    id = createdProduct.body.Product._id;
+
+    const actualProductData = createdProduct.body.Product;
+    expect(_.omit(actualProductData, ["_id", "createdOn"])).toEqual(productData);
+  });
+
+  test("NOT create product with invalid data", async ({ loginApiService, productsApi }) => {
+    token = await loginApiService.loginAsAdmin();
+    const productData = generateProductData();
+    const createdProduct = await productsApi.create({ ...productData, name: 123 } as unknown as IProduct, token);
+    validateResponse(createdProduct, {
+      status: STATUS_CODES.BAD_REQUEST,
+      IsSuccess: false,
+      ErrorMessage: "Incorrect request body",
+    });
+  });
+
+  test.describe("Creating products with valid data", () => {
+    for (const positiveCase of createProductPositiveCases) {
+      test(`${positiveCase.title}`, async ({ loginApiService, productsApi }) => {
+        token = await loginApiService.loginAsAdmin();
+        const createdProduct = await productsApi.create(positiveCase.productData as IProduct, token);
+        validateResponse(createdProduct, {
+          status: positiveCase.expectedStatus || STATUS_CODES.CREATED,
+          schema: createProductSchema,
+          IsSuccess: true,
+          ErrorMessage: null,
+        });
+
+        id = createdProduct.body.Product._id;
+
+        const actualProductData = createdProduct.body.Product;
+        expect(_.omit(actualProductData, ["_id", "createdOn"])).toEqual(positiveCase.productData);
+      });
+    }
+  });
+
+  test.describe("Creating products with invalid data", () => {
+    for (const negativeCase of createProductNegativeCases) {
+      test(`${negativeCase.title}`, async ({ loginApiService, productsApi }) => {
+        token = await loginApiService.loginAsAdmin();
+        const createdProduct = await productsApi.create(negativeCase.productData as IProduct, token);
+        validateResponse(createdProduct, {
+          status: negativeCase.expectedStatus || STATUS_CODES.BAD_REQUEST,
+          IsSuccess: false,
+          ErrorMessage: "Incorrect request body",
+        });
+      });
+    }
+  });
+
+
+});
