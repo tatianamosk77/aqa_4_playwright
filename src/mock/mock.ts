@@ -1,6 +1,7 @@
 import { Page } from "@playwright/test";
 import { apiConfig } from "config/apiConfig.js";
 import { STATUS_CODES } from "data/statusCodes.js";
+import { IMetricsResponse } from "data/types/metrics.types.js";
 import { IProductResponse, IProductsSortedResponse } from "data/types/product.types.js";
 
 export class Mock {
@@ -21,6 +22,15 @@ export class Mock {
             await route.fulfill({
                 status: statusCode,
                 contentType: "application/json",
+                body: JSON.stringify(body),
+            });
+        });
+    }
+    async homePageMetrics(body: IMetricsResponse, statusCode: STATUS_CODES = STATUS_CODES.OK) {
+        await this.page.route(apiConfig.baseURL + apiConfig.endpoints.metrics, async (route) => {
+            await route.fulfill({
+                status: statusCode,
+                contentType: 'application/json',
                 body: JSON.stringify(body),
             });
         });
