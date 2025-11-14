@@ -1,8 +1,7 @@
-
 import { Locator } from "@playwright/test";
-import { SalesPortalPage } from "./sales-portal.page";
+import { SalesPortalPage } from "./sales-portal.page.js";
 
-type HomeModuleButton = "Products" | "Customers" | "Orders";
+export type HomeModuleButton = "Products" | "Customers" | "Orders";
 
 export class HomePage extends SalesPortalPage {
     readonly welcomeText = this.page.locator(".welcome-text");

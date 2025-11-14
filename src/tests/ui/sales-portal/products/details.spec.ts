@@ -1,13 +1,13 @@
-
-import { credentials } from "config/env.js";
-import { NOTIFICATIONS } from "data/sales-portal/notifications.js";
-import { generateProductData } from "data/sales-portal/products/generateProductData.js";
-import { expect, test } from "fixtures/pages.fixture.js";
+import { test, expect } from "fixtures/business.fixture.js";
+import { NOTIFICATIONS } from "data/salesPortal/notifications.js";
+import { generateProductData } from "data/salesPortal/products/generateProductData.js";
 import _ from "lodash";
 
 test.describe("[Sales Portal] [Products]", () => {
+  let id = "";
+  let token = "";
   //test with fixtures version 1
-  test("Check product Details", async ({ signInPage, homePage, productsListPage, addNewProductPage }) => {
+  test("Product Details", async ({ loginAsAdmin, homePage, productsListPage, addNewProductPage }) => {
     //login page
     // const emailInput = page.locator("#emailinput");
     // const passwordInput = page.locator("#passwordinput");
@@ -18,10 +18,7 @@ test.describe("[Sales Portal] [Products]", () => {
     // await passwordInput.fill(credentials.password);
     // await loginButton.click();
     // await homePage.waitForOpened();
-    await signInPage.open()
-    await signInPage.fillSignInForm(credentials);
-    await signInPage.clickLogin()
-
+    await loginAsAdmin();
     await homePage.clickOnViewModule("Products");
     await productsListPage.waitForOpened();
     await productsListPage.clickAddNewProduct();
@@ -68,4 +65,25 @@ test.describe("[Sales Portal] [Products]", () => {
   //   const actual = await detailsModal.getData();
   //   expect(_.omit(actual, ["createdOn"])).toEqual(productData);
   // });
+
+  test("Product Details with services", async ({
+    loginUIService,
+    homeUIService,
+    productsListUIService,
+    productsApiService,
+    productsListPage,
+  }) => {
+    token = await loginUIService.loginAsAdmin();
+    const createdProduct = await productsApiService.create(token);
+    id = createdProduct._id;
+    await homeUIService.openModule("Products");
+    await productsListUIService.openDetailsModal(createdProduct.name);
+    const actual = await productsListPage.detailsModal.getData();
+    productsListUIService.assertDetailsData(actual, createdProduct);
+  });
+
+  test.afterEach(async ({ productsApiService }) => {
+    if (id) await productsApiService.delete(token, id);
+    id = "";
+  });
 });

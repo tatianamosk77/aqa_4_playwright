@@ -1,19 +1,15 @@
-
 import { ICredentials } from "data/types/credentials.types.js";
 import { SalesPortalPage } from "./sales-portal.page.js";
 
-export class SignInPage extends SalesPortalPage {
-
+export class LoginPage extends SalesPortalPage {
     readonly emailInput = this.page.locator("#emailinput");
     readonly passwordInput = this.page.locator("#passwordinput");
     readonly loginButton = this.page.locator("button[type='submit']");
+    readonly uniqueElement = this.page.locator("#signInPage");
 
-    readonly uniqueElement = this.emailInput;
-
-    async fillSignInForm(credentials: Partial<ICredentials>) {
+    async fillCredentials(credentials: Partial<ICredentials>) {
         if (credentials.username) await this.emailInput.fill(credentials.username);
         if (credentials.password) await this.passwordInput.fill(credentials.password);
-
     }
 
     async clickLogin() {

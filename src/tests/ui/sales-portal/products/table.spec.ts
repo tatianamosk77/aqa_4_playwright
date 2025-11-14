@@ -1,7 +1,7 @@
 import test, { expect } from "@playwright/test";
 import { credentials } from "config/env.js";
-import { generateProductData } from "data/sales-portal/products/generateProductData.js";
-import { NOTIFICATIONS } from "data/sales-portal/notifications.js";
+import { generateProductData } from "data/salesPortal/products/generateProductData.js";
+import { NOTIFICATIONS } from "data/salesPortal/notifications.js";
 import _ from "lodash";
 import { HomePage } from "ui/pages/home.page.js";
 import { AddNewProductPage } from "ui/pages/products/addNewProduct.page.js";
