@@ -5,6 +5,8 @@ import { SALES_PORTAL_URL } from "config/env.js";
 export abstract class SalesPortalPage extends BasePage {
     readonly spinner = this.page.locator(".spinner-border");
     readonly toastMessage = this.page.locator(".toast-body");
+    readonly closeToastButton = this.page.locator("#toast button")
+
     abstract readonly uniqueElement: Locator;
 
     async waitForOpened() {
@@ -18,5 +20,8 @@ export abstract class SalesPortalPage extends BasePage {
 
     async open(route?: string) {
         await this.page.goto(SALES_PORTAL_URL + route);
+    }
+    async closeToast() {
+        await this.closeToastButton.click()
     }
 }
