@@ -1,12 +1,12 @@
-import { ProductsApi } from "api/api/products.api";
-import { generateProductData } from "data/salesPortal/products/generateProductData";
-import { createProductSchema } from "data/schemas/products/create.schema";
-import { STATUS_CODES } from "data/statusCodes";
-import { IProduct } from "data/types/product.types";
-import { validateResponse } from "utils/validation/validateResponse.utils";
+import { ProductsApi } from "api/api/products.api.js";
+import { generateProductData } from "data/salesPortal/products/generateProductData.js";
+import { createProductSchema } from "data/schemas/products/create.schema.js";
+import { STATUS_CODES } from "data/statusCodes.js";
+import { IProduct } from "data/types/product.types.js";
+import { validateResponse } from "utils/validation/validateResponse.utils.js";
 
 export class ProductsApiService {
-  constructor(private productsApi: ProductsApi) {}
+  constructor(private productsApi: ProductsApi) { }
 
   async create(token: string, productData?: IProduct) {
     const data = generateProductData(productData);

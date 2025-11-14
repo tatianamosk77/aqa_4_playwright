@@ -1,16 +1,13 @@
-import { IProductDetails } from "data/types/product.types.js";
-import { SalesPortalPage } from "../sales-portal.page.js";
-import { MANUFACTURERS } from "data/sales-portal/products/manufacturers.js";
+import { BaseModal } from "../base.modal.js";
 
-export class ConfirmationModal extends SalesPortalPage {
-    readonly uniqueElement = this.page.locator("[name='confirmation-modal']");
+export class ConfirmationModal extends BaseModal {
+    readonly uniqueElement = this.page.locator('[name="confirmation-modal"]');
 
     readonly title = this.uniqueElement.locator("h5");
-    readonly closeButton = this.uniqueElement.locator("button.btn-close");
-    readonly deleteButton = this.uniqueElement.locator("button[type='submit']", { hasText: "Yes, Delete" });
+    readonly confirmButton = this.uniqueElement.locator("button.btn-danger");
     readonly cancelButton = this.uniqueElement.locator("button.btn-secondary");
-
-    readonly productValue = this.uniqueElement.locator("p");
+    readonly closeButton = this.uniqueElement.locator("button.btn-close");
+    readonly confirmationMessage = this.uniqueElement.locator("div.modal-body p");
 
     async clickClose() {
         await this.closeButton.click();
@@ -20,7 +17,7 @@ export class ConfirmationModal extends SalesPortalPage {
         await this.cancelButton.click();
     }
 
-    async clickDelete() {
-        await this.deleteButton.click();
+    async clickConfirm() {
+        await this.confirmButton.click();
     }
 }

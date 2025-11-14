@@ -1,6 +1,8 @@
 export enum NOTIFICATIONS {
   PRODUCT_CREATED = "Product was successfully created",
-  BAD_REQUEST = "Incorrect request body"
+  BAD_REQUEST = "Incorrect request body",
+  PRODUCT_DELETED = "Product was successfully deleted",
+
 }
 
 export const ERROR_MESSAGES = {
