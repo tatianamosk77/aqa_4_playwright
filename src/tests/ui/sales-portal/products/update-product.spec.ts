@@ -4,11 +4,11 @@ import _ from "lodash";
 import { convertToFullDateAndTime } from "utils/date.utils.js";
 
 
-test.describe("[Sales Portal] [Products]", async () => {
+test.describe("[Sales Portal] [Products] [E2E Update]", async () => {
     let id = "";
     let token = "";
 
-    test("Edit product with services", async ({
+    test("Update product with services", async ({
         loginUIService,
         addNewProductUIService,
         productsListPage,
@@ -28,8 +28,6 @@ test.describe("[Sales Portal] [Products]", async () => {
         const { detailsModal } = productsListPage;
         await detailsModal.waitForOpened();
         const actual = await detailsModal.getData();
-        console.log("Actual data:\n", actual)
-        console.log("Edited data:\n", editedProduct)
 
         expect(actual).toEqual({
             ..._.omit(editedProduct, ["_id"]),
