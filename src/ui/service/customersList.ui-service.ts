@@ -54,7 +54,7 @@ export class CustomersListUIService {
         });
     }
 
-    async assertCustomerInTable(customerEmail: string, { visible }: { visible: boolean }) {
+    async assertCustomerRowVisibleInTable(customerEmail: string, { visible }: { visible: boolean }) {
         await expect(this.customersListPage.tableRowByName(customerEmail)).toBeVisible({ visible });
     }
 }
