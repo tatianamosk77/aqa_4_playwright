@@ -1,8 +1,7 @@
-
 import { Locator } from "@playwright/test";
 import { SalesPortalPage } from "./sales-portal.page.js";
 
-type HomeModuleButton = "Products" | "Customers" | "Orders";
+export type HomeModuleButton = "Products" | "Customers" | "Orders";
 
 export class HomePage extends SalesPortalPage {
     readonly welcomeText = this.page.locator(".welcome-text");
@@ -26,25 +25,5 @@ export class HomePage extends SalesPortalPage {
         };
 
         await moduleButtons[module].click();
-    }
-    async getOrdersThisYearMetric() {
-        return parseInt(await this.ordersThisYear.textContent());
-    }
-
-    async getNewCustomersMetric() {
-        return parseInt(await this.newCustomers.textContent());
-    }
-
-    async getCanceledOrdersMetric() {
-        return parseInt(await this.canceledOrders.textContent());
-    }
-    async getTotalRevenueMetric() {
-        const text = await this.totalRevenue.textContent();
-        return text.trim().replace(/\s+/g, ' ');
-    }
-
-    async getAvgOrderValueMetric() {
-        const text = await this.avgOrderValue.textContent();
-        return text.trim().replace(/\s+/g, ' ');
     }
 }
