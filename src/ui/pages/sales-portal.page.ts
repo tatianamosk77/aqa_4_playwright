@@ -1,5 +1,5 @@
 import { expect, Locator } from "@playwright/test";
-import { BasePage } from "./base.page";
+import { BasePage } from "./base.page.js";
 import { SALES_PORTAL_URL } from "config/env";
 
 export abstract class SalesPortalPage extends BasePage {
