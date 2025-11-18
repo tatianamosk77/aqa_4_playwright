@@ -4,16 +4,13 @@ import { generateCustomerData } from "data/salesPortal/customers/generateCustome
 import { STATUS_CODES } from "data/statusCodes.js";
 import { ICustomer, ICustomerResponse } from "data/types/customer.types.js";
 import _ from "lodash";
+import { extname } from "path";
 import { AddNewCustomerPage, CustomersListPage } from "ui/pages/customers/index.js";
+import { BaseUIService } from "./base.ui-service.js";
 
-export class AddNewCustomerUIService {
-    addNewCustomerPage: AddNewCustomerPage;
-    customersListPage: CustomersListPage;
-
-    constructor(private page: Page) {
-        this.addNewCustomerPage = new AddNewCustomerPage(page);
-        this.customersListPage = new CustomersListPage(page);
-    }
+export class AddNewCustomerUIService extends BaseUIService {
+    private readonly addNewCustomerPage: AddNewCustomerPage = new AddNewCustomerPage(this.page);
+    private readonly customersListPage: CustomersListPage = new CustomersListPage(this.page);
 
     async open() {
         await this.addNewCustomerPage.open("customers/add");
