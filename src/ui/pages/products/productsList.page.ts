@@ -7,6 +7,10 @@ import { ConfirmationModal } from "./confirmation.modal.js";
 export class ProductsListPage extends SalesPortalPage {
     readonly detailsModal = new ProductDetailsModal(this.page);
     readonly deleteModal = new ConfirmationModal(this.page);
+import { SALES_PORTAL_URL } from "config/env.js";
+
+export class ProductsListPage extends SalesPortalPage {
+    readonly detailsModal = new ProductDetailsModal(this.page);
 
     readonly productsPageTitle = this.page.locator("h2.fw-bold");
     readonly addNewProductButton = this.page.locator('[name="add-button"]');
@@ -109,5 +113,7 @@ export class ProductsListPage extends SalesPortalPage {
 
     async clickSearch() {
         await this.searchButton.click();
+    async open() {
+        await this.page.goto(SALES_PORTAL_URL + "products");
     }
 }

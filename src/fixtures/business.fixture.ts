@@ -1,5 +1,5 @@
 import { SALES_PORTAL_URL, credentials } from "config/env.js";
-import { test as base, expect } from "./index.js";
+import { test as base, expect } from "fixtures";
 
 export const test = base.extend<{
   loginAsAdmin: () => Promise<void>;
