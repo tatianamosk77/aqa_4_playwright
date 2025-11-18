@@ -8,12 +8,13 @@ test.describe("[Integration] [Sales Portal] [Home Metrics]", () => {
 
     test("Orders This Year metric", async ({ loginAsAdmin, homePage, page, mock }) => {
         const expectedOrdersThisYear = 150;
-        const mockData = HomeMetricsTestBuilder.forOrdersThisYear(expectedOrdersThisYear);
+        const mockData = HomeMetricsTestBuilder.create()
+            .withOrdersThisYear(expectedOrdersThisYear)
+            .build();
 
         await mock.homePageMetrics(mockData);
-
         await loginAsAdmin();
-        await page.goto(SALES_PORTAL_URL);
+        await homePage.open();
         await homePage.waitForOpened();
 
         const actualOrdersThisYear = await homePage.getOrdersThisYearMetric();
@@ -23,12 +24,13 @@ test.describe("[Integration] [Sales Portal] [Home Metrics]", () => {
     test("New Customers metric", async ({ loginAsAdmin, homePage, page, mock }) => {
         const expectedNewCustomers = 42;
 
-        const mockData = HomeMetricsTestBuilder.forNewCustomers(expectedNewCustomers);
+        const mockData = HomeMetricsTestBuilder.create()
+            .withNewCustomers(expectedNewCustomers)
+            .build();
 
         await mock.homePageMetrics(mockData);
-
         await loginAsAdmin();
-        await page.goto(SALES_PORTAL_URL);
+        await homePage.open();
         await homePage.waitForOpened();
 
         const actualNewCustomers = await homePage.getNewCustomersMetric();
@@ -38,10 +40,11 @@ test.describe("[Integration] [Sales Portal] [Home Metrics]", () => {
     test("Canceled Orders metric", async ({ loginAsAdmin, homePage, page, mock }) => {
         const expectedCanceledOrders = 8;
 
-        const mockData = HomeMetricsTestBuilder.forCanceledOrders(expectedCanceledOrders);
+        const mockData = HomeMetricsTestBuilder.create()
+            .withCanceledOrders(expectedCanceledOrders)
+            .build();
 
         await mock.homePageMetrics(mockData);
-
         await loginAsAdmin();
         await page.goto(SALES_PORTAL_URL);
         await homePage.waitForOpened();
@@ -54,7 +57,9 @@ test.describe("[Integration] [Sales Portal] [Home Metrics]", () => {
     test("Total Revenue metric", async ({ loginAsAdmin, homePage, page, mock }) => {
         const expectedTotalRevenue = 50000;
 
-        const mockData = HomeMetricsTestBuilder.forTotalRevenue(expectedTotalRevenue);
+        const mockData = HomeMetricsTestBuilder.create()
+            .withTotalRevenue(expectedTotalRevenue)
+            .build();
 
         await mock.homePageMetrics(mockData);
         await loginAsAdmin();
@@ -64,15 +69,17 @@ test.describe("[Integration] [Sales Portal] [Home Metrics]", () => {
         const actualTotalRevenue = await homePage.getTotalRevenueMetric();
         const expectedFormatted = numeral(expectedTotalRevenue).format('0.0a');
         expect(actualTotalRevenue).toBe(`$${expectedFormatted}`);
+
     });
 
     test("Avg Order Value metric", async ({ loginAsAdmin, homePage, page, mock }) => {
         const expectedAvgOrderValue = 375;
 
-        const mockData = HomeMetricsTestBuilder.forAvgOrderValue(expectedAvgOrderValue);
+        const mockData = HomeMetricsTestBuilder.create()
+            .withAvgOrderValue(expectedAvgOrderValue)
+            .build();
 
         await mock.homePageMetrics(mockData);
-
         await loginAsAdmin();
         await page.goto(SALES_PORTAL_URL);
         await homePage.waitForOpened();
@@ -80,5 +87,6 @@ test.describe("[Integration] [Sales Portal] [Home Metrics]", () => {
         const actualAvgOrderValue = await homePage.getAvgOrderValueMetric();
         const expectedFormatted = numeral(expectedAvgOrderValue).format('0.0a');
         expect(actualAvgOrderValue).toBe(`$${expectedFormatted}`);
+
     });
 });

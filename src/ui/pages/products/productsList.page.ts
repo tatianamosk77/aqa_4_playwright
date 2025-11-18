@@ -2,6 +2,7 @@ import { IProductInTable, ProductsTableHeader } from "data/types/product.types.j
 import { SalesPortalPage } from "../sales-portal.page.js";
 import { MANUFACTURERS } from "data/salesPortal/products/manufacturers.js";
 import { ProductDetailsModal } from "./details.modal.js";
+import { SALES_PORTAL_URL } from "config/env.js";
 
 export class ProductsListPage extends SalesPortalPage {
     readonly detailsModal = new ProductDetailsModal(this.page);
@@ -96,5 +97,9 @@ export class ProductsListPage extends SalesPortalPage {
 
     async clickTableHeader(name: ProductsTableHeader) {
         await this.tableHeaderNamed(name).click();
+    }
+
+    async open() {
+        await this.page.goto(SALES_PORTAL_URL + "products");
     }
 }

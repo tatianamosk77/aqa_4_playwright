@@ -1,11 +1,13 @@
 import { test, expect } from "fixtures/business.fixture.js";
 import { generateProductResponseData } from "data/salesPortal/products/generateProductData.js";
 import _ from "lodash";
-import { SALES_PORTAL_URL } from "config/env.js";
 import { convertToFullDateAndTime } from "utils/date.utils.js";
+import { ProductsListPage } from "ui/pages/products/productsList.page.js";
 
 test.describe("[Integration] [Sales Portal] [Products]", () => {
     test("Product Details", async ({ loginAsAdmin, productsListPage, page, mock }) => {
+        const productListPage = new ProductsListPage(page);
+
         const expectedProductResponse = generateProductResponseData();
         await mock.productsPage({
             Products: [expectedProductResponse],
@@ -29,7 +31,7 @@ test.describe("[Integration] [Sales Portal] [Products]", () => {
         });
 
         await loginAsAdmin();
-        await page.goto(SALES_PORTAL_URL + "products");
+        await productListPage.open();
         await productsListPage.waitForOpened();
         await productsListPage.clickAction(expectedProductResponse.name, "details");
         const { detailsModal } = productsListPage;

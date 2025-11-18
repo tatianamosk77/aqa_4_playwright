@@ -1,7 +1,17 @@
 import { IMetricsResponse } from "data/types/metrics.types.js";
 
 export class HomeMetricsTestBuilder {
-    static createBaseMetrics(): IMetricsResponse {
+    private metrics: IMetricsResponse;
+
+    private constructor() {
+        this.metrics = this.createBaseMetrics();
+    }
+
+    static create(): HomeMetricsTestBuilder {
+        return new HomeMetricsTestBuilder();
+    }
+
+    private createBaseMetrics(): IMetricsResponse {
         return {
             IsSuccess: true,
             Metrics: {
@@ -33,33 +43,37 @@ export class HomeMetricsTestBuilder {
         };
     }
 
-    static forOrdersThisYear(value: number): IMetricsResponse {
-        const metrics = this.createBaseMetrics();
-        metrics.Metrics.orders.totalOrders = value;
-        return metrics;
+    withOrdersThisYear(value: number): this {
+        this.metrics.Metrics.orders.totalOrders = value;
+        return this;
     }
 
-    static forNewCustomers(value: number): IMetricsResponse {
-        const metrics = this.createBaseMetrics();
-        metrics.Metrics.customers.totalNewCustomers = value;
-        return metrics;
+    withNewCustomers(value: number): this {
+        this.metrics.Metrics.customers.totalNewCustomers = value;
+        return this;
     }
 
-    static forCanceledOrders(value: number): IMetricsResponse {
-        const metrics = this.createBaseMetrics();
-        metrics.Metrics.orders.totalCanceledOrders = value;
-        return metrics;
+    withCanceledOrders(value: number): this {
+        this.metrics.Metrics.orders.totalCanceledOrders = value;
+        return this;
     }
 
-    static forTotalRevenue(value: number): IMetricsResponse {
-        const metrics = this.createBaseMetrics();
-        metrics.Metrics.orders.totalRevenue = value;
-        return metrics;
+    withTotalRevenue(value: number): this {
+        this.metrics.Metrics.orders.totalRevenue = value;
+        return this;
     }
 
-    static forAvgOrderValue(value: number): IMetricsResponse {
-        const metrics = this.createBaseMetrics();
-        metrics.Metrics.orders.averageOrderValue = value;
-        return metrics;
+    withAvgOrderValue(value: number): this {
+        this.metrics.Metrics.orders.averageOrderValue = value;
+        return this;
+    }
+
+    withCustomMetrics(customizer: (metrics: IMetricsResponse) => void): this {
+        customizer(this.metrics);
+        return this;
+    }
+
+    build(): IMetricsResponse {
+        return this.metrics;
     }
 }

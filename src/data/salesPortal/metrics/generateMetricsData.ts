@@ -1,28 +1,40 @@
 import { IMetricsResponse } from "data/types/metrics.types.js";
 
+const DEFAULT_METRICS = {
+    ORDERS: {
+        TOTAL_REVENUE: 50000,
+        TOTAL_ORDERS: 150,
+        AVERAGE_ORDER_VALUE: 333,
+        TOTAL_CANCELED_ORDERS: 10
+    },
+    CUSTOMERS: {
+        TOTAL_NEW_CUSTOMERS: 25
+    },
+    DATE_RANGE: {
+        START_YEAR: 2025,
+        START_MONTH: 10,
+        START_DAY: 30,
+        DAYS_COUNT: 15,
+        DAYS_IN_MONTH: 30
+    }
+} as const;
+
 export function generateMetricsData(overrides?: Partial<IMetricsResponse>): IMetricsResponse {
     const baseMetrics: IMetricsResponse = {
         IsSuccess: true,
         Metrics: {
             orders: {
-                totalRevenue: 50000,
-                totalOrders: 150,
-                averageOrderValue: 333,
-                totalCanceledOrders: 10,
+                totalRevenue: DEFAULT_METRICS.ORDERS.TOTAL_REVENUE,
+                totalOrders: DEFAULT_METRICS.ORDERS.TOTAL_ORDERS,
+                averageOrderValue: DEFAULT_METRICS.ORDERS.AVERAGE_ORDER_VALUE,
+                totalCanceledOrders: DEFAULT_METRICS.ORDERS.TOTAL_CANCELED_ORDERS,
                 recentOrders: [],
                 ordersCountPerDay: []
             },
             customers: {
-                totalNewCustomers: 25,
+                totalNewCustomers: DEFAULT_METRICS.CUSTOMERS.TOTAL_NEW_CUSTOMERS,
                 topCustomers: [],
-                customerGrowth: Array.from({ length: 15 }, (_, i) => ({
-                    date: {
-                        year: 2025,
-                        month: 10 + Math.floor(i / 30),
-                        day: 30 + (i % 30)
-                    },
-                    count: 0
-                }))
+                customerGrowth: generateCustomerGrowthData()
             },
             products: {
                 topProducts: []
@@ -32,6 +44,25 @@ export function generateMetricsData(overrides?: Partial<IMetricsResponse>): IMet
     };
 
     return deepMerge(baseMetrics, overrides);
+}
+
+function generateCustomerGrowthData() {
+    const { START_YEAR, START_MONTH, START_DAY, DAYS_COUNT, DAYS_IN_MONTH } = DEFAULT_METRICS.DATE_RANGE;
+
+    return Array.from({ length: DAYS_COUNT }, (_, index) => {
+        const daysFromStart = index;
+        const month = START_MONTH + Math.floor(daysFromStart / DAYS_IN_MONTH);
+        const day = START_DAY + (daysFromStart % DAYS_IN_MONTH);
+
+        return {
+            date: {
+                year: START_YEAR,
+                month,
+                day
+            },
+            count: 0
+        };
+    });
 }
 
 function deepMerge(target: any, source: any): any {

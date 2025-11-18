@@ -6,6 +6,7 @@ import { ProductsSortField, ProductsTableHeader } from "data/types/product.types
 import { SortOrder } from "data/types/core.types.js";
 import _ from "lodash";
 import { convertToDateAndTime } from "utils/date.utils.js";
+import { ProductsListPage } from "ui/pages/products/productsList.page.js";
 
 test.describe("[Integration] [Sales Portal] [Products] [Table Sorting]", () => {
     // test("Field: createdOn, direction: asc", async ({ loginAsAdmin, productsListPage, page, mock }) => {
@@ -111,6 +112,8 @@ test.describe("[Integration] [Sales Portal] [Products] [Table Sorting]", () => {
     for (const header of ["Name", "Price", "Manufacturer", "Created On"] as ProductsTableHeader[]) {
         for (const direction of directions) {
             test(`Field: ${header}, direction: ${direction}`, async ({ loginAsAdmin, productsListPage, page, mock }) => {
+                const productListPage = new ProductsListPage(page);
+
                 const headersMapper: Record<string, ProductsSortField> = {
                     Name: "name",
                     Price: "price",
@@ -136,7 +139,7 @@ test.describe("[Integration] [Sales Portal] [Products] [Table Sorting]", () => {
                 });
 
                 await loginAsAdmin();
-                await page.goto(SALES_PORTAL_URL + "products");
+                await productListPage.open();
                 await productsListPage.waitForOpened();
 
                 await mock.productsPage({
