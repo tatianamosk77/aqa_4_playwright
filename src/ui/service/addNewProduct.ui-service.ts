@@ -6,6 +6,7 @@ import { IProduct, IProductResponse } from "data/types/product.types.js";
 import _ from "lodash";
 import { AddNewProductPage, ProductsListPage } from "ui/pages/products/index.js";
 import { BaseUIService } from "./base.ui-service.js";
+import { logStep } from "utils/report/logStep.utils.js";
 
 export class AddNewProductUIService extends BaseUIService {
 
@@ -13,11 +14,13 @@ export class AddNewProductUIService extends BaseUIService {
     private readonly productsListPage: ProductsListPage = new ProductsListPage(this.page);
 
 
+    @logStep("Open Add products page")
     async open() {
         await this.addNewProductPage.open("products/add");
         await this.addNewProductPage.waitForOpened();
     }
 
+    @logStep("Create a product via UI")
     async create(productData?: Partial<IProduct>) {
         const data = generateProductData(productData);
         await this.addNewProductPage.fillForm(data);

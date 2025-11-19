@@ -3,6 +3,7 @@ import { credentials } from "config/env.js";
 import { ICredentials } from "data/types/credentials.types.js";
 import { HomePage } from "ui/pages/home.page.js";
 import { LoginPage } from "ui/pages/sign-in.page.js";
+import { logStep } from "utils/report/logStep.utils.js";
 
 export class LoginUIService {
   homePage: HomePage;
@@ -13,10 +14,12 @@ export class LoginUIService {
     this.loginPage = new LoginPage(page);
   }
 
+  @logStep("Login as Admin")
   async loginAsAdmin() {
     return await this.login(credentials);
   }
 
+  @logStep("Login")
   async login(credentials: ICredentials) {
     await this.loginPage.open();
     await this.loginPage.fillCredentials(credentials);

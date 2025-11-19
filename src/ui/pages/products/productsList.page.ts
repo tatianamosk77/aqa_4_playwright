@@ -4,6 +4,7 @@ import { MANUFACTURERS } from "data/salesPortal/products/manufacturers.js";
 import { ProductDetailsModal } from "./details.modal.js";
 import { ConfirmationModal } from "./confirmation.modal.js";
 import { SALES_PORTAL_URL } from "config/env.js";
+import { logStep } from "utils/report/logStep.utils.js";
 
 
 export class ProductsListPage extends SalesPortalPage {
@@ -42,10 +43,12 @@ export class ProductsListPage extends SalesPortalPage {
 
     readonly uniqueElement = this.addNewProductButton;
 
+    @logStep("Click Add new product")
     async clickAddNewProduct() {
         await this.addNewProductButton.click();
     }
 
+    @logStep("Get product data from the table")
     async getProductData(productName: string): Promise<IProductInTable> {
         //Variant 1
         // return {
@@ -79,6 +82,7 @@ export class ProductsListPage extends SalesPortalPage {
         };
     }
 
+    @logStep("Get products data from the table")
     async getTableData(): Promise<IProductInTable[]> {
         const data: IProductInTable[] = [];
 
@@ -95,24 +99,28 @@ export class ProductsListPage extends SalesPortalPage {
         return data;
     }
 
+    @logStep("Click edit/delete/details action")
     async clickAction(productName: string, button: "edit" | "delete" | "details") {
         if (button === "edit") await this.editButton(productName).click();
         if (button === "delete") await this.deleteButton(productName).click();
         if (button === "details") await this.detailsButton(productName).click();
     }
 
+    @logStep("Click header name from the table")
     async clickTableHeader(name: ProductsTableHeader) {
         await this.tableHeaderNamed(name).click();
     }
 
+    @logStep("Fill search input")
     async fillSearchInput(text: string) {
         await this.searchInput.fill(text);
     }
 
+    @logStep("Click search")
     async clickSearch() {
         await this.searchButton.click();
     }
-    async open() {
-        await this.page.goto(SALES_PORTAL_URL + "products");
-    }
+    // async open() {
+    //     await this.page.goto(SALES_PORTAL_URL + "products");
+    // }
 }

@@ -5,6 +5,7 @@ import { STATUS_CODES } from "data/statusCodes.js";
 import { IProduct, IProductResponse } from "data/types/product.types.js";
 import _ from "lodash";
 import { EditProductPage, ProductsListPage } from "ui/pages/products/index.js";
+import { logStep } from "utils/report/logStep.utils.js";
 
 export class EditProductUIService {
     productsListPage: ProductsListPage;
@@ -15,11 +16,13 @@ export class EditProductUIService {
         this.productsListPage = new ProductsListPage(page);
     }
 
+    @logStep("Open product id for editing")
     async open(id: string) {
         await this.editProductPage.open(`products/${id}/edit`);
         await this.editProductPage.waitForOpened();
     }
 
+    @logStep("Edit product")
     async edit(id: string) {
         const data = generateProductData();
         await this.editProductPage.fillForm(data);
