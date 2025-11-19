@@ -6,6 +6,7 @@ import _ from "lodash";
 import { validateResponse } from "utils/validation/validateResponse.utils.js";
 import { IProduct } from "data/types/product.types.js";
 import { createProductNegativeCases, createProductPositiveCases } from "data/salesPortal/products/generateProductTestData.js";
+import { TAGS } from "data/tags.js";
 
 test.describe("[API] [Sales Portal] [Products]", () => {
   let id = "";
@@ -15,24 +16,29 @@ test.describe("[API] [Sales Portal] [Products]", () => {
     if (id) await productsApiService.delete(token, id);
   });
 
-  test("Create Product", async ({ loginApiService, productsApi }) => {
-    token = await loginApiService.loginAsAdmin();
-    const productData = generateProductData();
-    const createdProduct = await productsApi.create(productData, token);
-    validateResponse(createdProduct, {
-      status: STATUS_CODES.CREATED,
-      schema: createProductSchema,
-      IsSuccess: true,
-      ErrorMessage: null,
+  test("Create Product", {
+    tag: [TAGS.SMOKE, TAGS.REGRESSION, TAGS.PRODUCTS, TAGS.API],
+  },
+    async ({ loginApiService, productsApi }) => {
+      token = await loginApiService.loginAsAdmin();
+      const productData = generateProductData();
+      const createdProduct = await productsApi.create(productData, token);
+      validateResponse(createdProduct, {
+        status: STATUS_CODES.CREATED,
+        schema: createProductSchema,
+        IsSuccess: true,
+        ErrorMessage: null,
+      });
+
+      id = createdProduct.body.Product._id;
+
+      const actualProductData = createdProduct.body.Product;
+      expect(_.omit(actualProductData, ["_id", "createdOn"])).toEqual(productData);
     });
 
-    id = createdProduct.body.Product._id;
-
-    const actualProductData = createdProduct.body.Product;
-    expect(_.omit(actualProductData, ["_id", "createdOn"])).toEqual(productData);
-  });
-
-  test("NOT create product with invalid data", async ({ loginApiService, productsApi }) => {
+  test("NOT create product with invalid data", {
+    tag: [TAGS.REGRESSION, TAGS.PRODUCTS, TAGS.API],
+  }, async ({ loginApiService, productsApi }) => {
     token = await loginApiService.loginAsAdmin();
     const productData = generateProductData();
     const createdProduct = await productsApi.create({ ...productData, name: 123 } as unknown as IProduct, token);
@@ -43,7 +49,9 @@ test.describe("[API] [Sales Portal] [Products]", () => {
     });
   });
 
-  test.describe("Creating products with valid data", () => {
+  test.describe("Creating products with valid data", {
+    tag: [TAGS.SMOKE, TAGS.REGRESSION, TAGS.PRODUCTS, TAGS.API],
+  }, () => {
     for (const positiveCase of createProductPositiveCases) {
       test(`${positiveCase.title}`, async ({ loginApiService, productsApi }) => {
         token = await loginApiService.loginAsAdmin();
@@ -63,7 +71,9 @@ test.describe("[API] [Sales Portal] [Products]", () => {
     }
   });
 
-  test.describe("Creating products with invalid data", () => {
+  test.describe("Creating products with invalid data", {
+    tag: [TAGS.REGRESSION, TAGS.PRODUCTS, TAGS.API],
+  }, () => {
     for (const negativeCase of createProductNegativeCases) {
       test(`${negativeCase.title}`, async ({ loginApiService, productsApi }) => {
         token = await loginApiService.loginAsAdmin();

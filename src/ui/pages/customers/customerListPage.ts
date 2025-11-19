@@ -3,6 +3,7 @@ import { SalesPortalPage } from "../sales-portal.page.js";
 import { COUNTRIES } from "data/salesPortal/customers/countries.js";
 import { ConfirmationModal } from "../products/confirmation.modal.js";
 import { CustomerDetailsModal } from "./details.modal.js";
+import { logStep } from "utils/report/logStep.utils.js";
 
 export class CustomersListPage extends SalesPortalPage {
     readonly detailsModal = new CustomerDetailsModal(this.page);
@@ -38,10 +39,12 @@ export class CustomersListPage extends SalesPortalPage {
 
     readonly uniqueElement = this.addNewCustomerButton;
 
+    @logStep("Click Add new customer button")
     async clickAddNewCustomer() {
         await this.addNewCustomerButton.click();
     }
 
+    @logStep("Get customer data from the table")
     async getCustomerData(customerEmail: string): Promise<ICustomerInTable> {
 
         const [email, name, country, createdOn] = await this.tableRowByName(customerEmail).locator("td").allInnerTexts();
@@ -52,7 +55,7 @@ export class CustomersListPage extends SalesPortalPage {
             createdOn: createdOn!,
         };
     }
-
+    @logStep("Get customers data from the table")
     async getTableData(): Promise<ICustomerInTable[]> {
         const data: ICustomerInTable[] = [];
 
@@ -69,20 +72,24 @@ export class CustomersListPage extends SalesPortalPage {
         return data;
     }
 
+    @logStep("Click edit/delete/details action")
     async clickAction(customerEmail: string, button: "edit" | "delete" | "details") {
         if (button === "edit") await this.editButton(customerEmail).click();
         if (button === "delete") await this.deleteButton(customerEmail).click();
         if (button === "details") await this.detailsButton(customerEmail).click();
     }
 
+    @logStep("Click table header name")
     async clickTableHeader(name: CustomerTableHeader) {
         await this.tableHeaderNamed(name).click();
     }
 
+    @logStep("Fill search input")
     async fillSearchInput(text: string) {
         await this.searchInput.fill(text);
     }
 
+    @logStep("Click search button")
     async clickSearch() {
         await this.searchButton.click();
     }

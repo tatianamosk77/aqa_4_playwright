@@ -1,5 +1,6 @@
 import { Locator } from "@playwright/test";
 import { SalesPortalPage } from "./sales-portal.page.js";
+import { logStep } from "utils/report/logStep.utils.js";
 
 export type HomeModuleButton = "Products" | "Customers" | "Orders";
 
@@ -17,6 +18,7 @@ export class HomePage extends SalesPortalPage {
     readonly avgOrderValue = this.page.locator("#avg-orders-value-container p")
 
 
+    @logStep("Click on ViewModel")
     async clickOnViewModule(module: HomeModuleButton) {
         const moduleButtons: Record<HomeModuleButton, Locator> = {
             Products: this.productsButton,

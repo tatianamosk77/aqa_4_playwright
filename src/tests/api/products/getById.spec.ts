@@ -2,6 +2,7 @@ import { test, expect } from "fixtures/api.fixture.js";
 import { getProductSchema } from "data/schemas/products/get.schema.js";
 import { STATUS_CODES } from "data/statusCodes.js";
 import { validateResponse } from "utils/validation/validateResponse.utils.js";
+import { TAGS } from "data/tags.js";
 
 test.describe("[API] [Sales Portal] [Products]", () => {
   let id = "";
@@ -11,7 +12,9 @@ test.describe("[API] [Sales Portal] [Products]", () => {
     await productsApiService.delete(token, id);
   });
 
-  test("Get Product By Id", async ({ loginApiService, productsApiService, productsApi }) => {
+  test("Get Product By Id", {
+    tag: [TAGS.REGRESSION, TAGS.PRODUCTS, TAGS.API],
+  }, async ({ loginApiService, productsApiService, productsApi }) => {
     //TODO: Preconditions
     token = await loginApiService.loginAsAdmin();
     const product = await productsApiService.create(token);

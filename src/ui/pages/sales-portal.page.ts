@@ -1,6 +1,7 @@
 import { expect, Locator } from "@playwright/test";
 import { BasePage } from "./base.page.js";
 import { SALES_PORTAL_URL, TIMEOUTS } from "config/env.js";
+import { logStep } from "utils/report/logStep.utils.js";
 
 export abstract class SalesPortalPage extends BasePage {
     readonly spinner = this.page.locator(".spinner-border");
@@ -9,18 +10,23 @@ export abstract class SalesPortalPage extends BasePage {
 
     abstract readonly uniqueElement: Locator;
 
+    @logStep("Wait for unique element opened")
     async waitForOpened() {
         await expect(this.uniqueElement).toBeVisible({ timeout: TIMEOUTS.ELEMENT_VISIBLE });
         await this.waitForSpinners();
     }
 
+    @logStep("Wait for spinner")
     async waitForSpinners() {
         await expect(this.spinner).toHaveCount(0, { timeout: TIMEOUTS.ELEMENT_VISIBLE });
     }
 
+    @logStep("Open page")
     async open(route = '') {
         await this.page.goto(SALES_PORTAL_URL + route);
     }
+
+    @logStep("Click toast")
     async closeToast() {
         await this.closeToastButton.click()
     }

@@ -1,17 +1,20 @@
 import { NOTIFICATIONS } from "data/salesPortal/notifications.js";
 import { STATUS_CODES } from "data/statusCodes.js";
+import { TAGS } from "data/tags.js";
 import { expect, test } from "fixtures/business.fixture.js";
 
 test.describe("[Sales Portal] [Products]", () => {
-    test("Delete", async ({
-        loginUIService,
+    test("Delete", {
+        tag: [TAGS.SMOKE, TAGS.REGRESSION, TAGS.PRODUCTS, TAGS.UI],
+    }, async ({
         productsListUIService,
         homeUIService,
         productsApiService,
         productsListPage,
         productsApi,
     }) => {
-        const token = await loginUIService.loginAsAdmin();
+        const token = await productsListPage.getAuthToken();
+        await productsListPage.open();
         const createdProduct = await productsApiService.create(token);
         await homeUIService.openModule("Products");
         await productsListUIService.deleteProduct(createdProduct.name);

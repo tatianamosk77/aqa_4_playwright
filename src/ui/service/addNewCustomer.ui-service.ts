@@ -7,16 +7,19 @@ import _ from "lodash";
 import { extname } from "path";
 import { AddNewCustomerPage, CustomersListPage } from "ui/pages/customers/index.js";
 import { BaseUIService } from "./base.ui-service.js";
+import { logStep } from "utils/report/logStep.utils.js";
 
 export class AddNewCustomerUIService extends BaseUIService {
     private readonly addNewCustomerPage: AddNewCustomerPage = new AddNewCustomerPage(this.page);
     private readonly customersListPage: CustomersListPage = new CustomersListPage(this.page);
 
+    @logStep("Open Add customers page")
     async open() {
         await this.addNewCustomerPage.open("customers/add");
         await this.addNewCustomerPage.waitForOpened();
     }
 
+    @logStep("Create a customer via UI")
     async create(customerData?: Partial<ICustomer>) {
         const data = generateCustomerData(customerData);
         await this.addNewCustomerPage.fillForm(data);

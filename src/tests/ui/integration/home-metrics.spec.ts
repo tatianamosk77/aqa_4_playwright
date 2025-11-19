@@ -2,26 +2,32 @@ import { test, expect } from "fixtures/business.fixture.js";
 import { SALES_PORTAL_URL } from "config/env.js";
 import numeral from "numeral";
 import { HomeMetricsTestBuilder } from "utils/homeMetricsHelper.js";
+import { TAGS } from "data/tags.js";
 
 
 test.describe("[Integration] [Sales Portal] [Home Metrics]", () => {
 
-    test("Orders This Year metric", async ({ loginAsAdmin, homePage, page, mock }) => {
-        const expectedOrdersThisYear = 150;
-        const mockData = HomeMetricsTestBuilder.create()
-            .withOrdersThisYear(expectedOrdersThisYear)
-            .build();
+    test("Orders This Year metric",
+        {
+            tag: [TAGS.VISUAL_REGRESSION, TAGS.PRODUCTS, TAGS.INTEGRATION],
+        }, async ({ loginAsAdmin, homePage, page, mock }) => {
+            const expectedOrdersThisYear = 150;
+            const mockData = HomeMetricsTestBuilder.create()
+                .withOrdersThisYear(expectedOrdersThisYear)
+                .build();
 
-        await mock.homePageMetrics(mockData);
-        await loginAsAdmin();
-        await homePage.open();
-        await homePage.waitForOpened();
+            await mock.homePageMetrics(mockData);
+            await loginAsAdmin();
+            await homePage.open();
+            await homePage.waitForOpened();
 
-        const actualOrdersThisYear = await homePage.getOrdersThisYearMetric();
-        expect(actualOrdersThisYear).toBe(expectedOrdersThisYear);
-    });
+            const actualOrdersThisYear = await homePage.getOrdersThisYearMetric();
+            expect(actualOrdersThisYear).toBe(expectedOrdersThisYear);
+        });
 
-    test("New Customers metric", async ({ loginAsAdmin, homePage, page, mock }) => {
+    test("New Customers metric", {
+        tag: [TAGS.VISUAL_REGRESSION, TAGS.PRODUCTS, TAGS.INTEGRATION],
+    }, async ({ loginAsAdmin, homePage, page, mock }) => {
         const expectedNewCustomers = 42;
 
         const mockData = HomeMetricsTestBuilder.create()
@@ -37,7 +43,9 @@ test.describe("[Integration] [Sales Portal] [Home Metrics]", () => {
         expect(actualNewCustomers).toBe(expectedNewCustomers);
     });
 
-    test("Canceled Orders metric", async ({ loginAsAdmin, homePage, page, mock }) => {
+    test("Canceled Orders metric", {
+        tag: [TAGS.VISUAL_REGRESSION, TAGS.PRODUCTS, TAGS.INTEGRATION],
+    }, async ({ loginAsAdmin, homePage, page, mock }) => {
         const expectedCanceledOrders = 8;
 
         const mockData = HomeMetricsTestBuilder.create()
@@ -54,7 +62,9 @@ test.describe("[Integration] [Sales Portal] [Home Metrics]", () => {
     });
 
 
-    test("Total Revenue metric", async ({ loginAsAdmin, homePage, page, mock }) => {
+    test("Total Revenue metric", {
+        tag: [TAGS.VISUAL_REGRESSION, TAGS.PRODUCTS, TAGS.INTEGRATION],
+    }, async ({ loginAsAdmin, homePage, page, mock }) => {
         const expectedTotalRevenue = 50000;
 
         const mockData = HomeMetricsTestBuilder.create()
@@ -72,21 +82,24 @@ test.describe("[Integration] [Sales Portal] [Home Metrics]", () => {
 
     });
 
-    test("Avg Order Value metric", async ({ loginAsAdmin, homePage, page, mock }) => {
-        const expectedAvgOrderValue = 375;
+    test("Avg Order Value metric",
+        {
+            tag: [TAGS.REGRESSION, TAGS.PRODUCTS, TAGS.INTEGRATION],
+        }, async ({ loginAsAdmin, homePage, page, mock }) => {
+            const expectedAvgOrderValue = 375;
 
-        const mockData = HomeMetricsTestBuilder.create()
-            .withAvgOrderValue(expectedAvgOrderValue)
-            .build();
+            const mockData = HomeMetricsTestBuilder.create()
+                .withAvgOrderValue(expectedAvgOrderValue)
+                .build();
 
-        await mock.homePageMetrics(mockData);
-        await loginAsAdmin();
-        await page.goto(SALES_PORTAL_URL);
-        await homePage.waitForOpened();
+            await mock.homePageMetrics(mockData);
+            await loginAsAdmin();
+            await page.goto(SALES_PORTAL_URL);
+            await homePage.waitForOpened();
 
-        const actualAvgOrderValue = await homePage.getAvgOrderValueMetric();
-        const expectedFormatted = numeral(expectedAvgOrderValue).format('0.0a');
-        expect(actualAvgOrderValue).toBe(`$${expectedFormatted}`);
+            const actualAvgOrderValue = await homePage.getAvgOrderValueMetric();
+            const expectedFormatted = numeral(expectedAvgOrderValue).format('0.0a');
+            expect(actualAvgOrderValue).toBe(`$${expectedFormatted}`);
 
-    });
+        });
 });

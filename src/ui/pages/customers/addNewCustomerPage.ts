@@ -1,6 +1,7 @@
 
 import { ICustomer } from "data/types/customer.types.js";
 import { SalesPortalPage } from "../sales-portal.page.js";
+import { logStep } from "utils/report/logStep.utils.js";
 
 export class AddNewCustomerPage extends SalesPortalPage {
     readonly title = this.page.locator("h2.page-title-text");
@@ -17,6 +18,7 @@ export class AddNewCustomerPage extends SalesPortalPage {
 
     readonly uniqueElement = this.title;
 
+    @logStep("Fill customer form for creation")
     async fillForm(customerData: Partial<ICustomer>) {
         if (customerData.name) await this.nameInput.fill(customerData.name);
         if (customerData.email) await this.email.fill(customerData.email);
@@ -28,7 +30,7 @@ export class AddNewCustomerPage extends SalesPortalPage {
         if (customerData.phone) await this.phoneInput.fill(customerData.phone.toString());
         if (customerData.notes) await this.notesInput.fill(customerData.notes);
     }
-
+    @logStep("Click save-button during creation")
     async clickSave() {
         await this.saveButton.click();
     }
